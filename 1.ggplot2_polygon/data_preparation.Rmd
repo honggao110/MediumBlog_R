@@ -38,7 +38,7 @@ Read in and plot New York City Zip Code map.
 filepath = "~/Documents/HongGao/MediumBlog_R/1.ggplot2_polygon"
 setwd(filepath)
 # read in zip code shapefile
-zipcode <- readOGR(".", "ZIP_CODE_040114")
+zipcode <- readOGR("ZIP_CODE_040114/", "ZIP_CODE_040114")
 # generate a unique ID for each polygon
 zipcode@data$seq_id <- seq(1:nrow(zipcode@data))
 # plot it
