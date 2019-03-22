@@ -14,3 +14,8 @@ cd filepath
 
 and then type 
 
+```
+git clone https://github.com/honggao110/MediumBlog_R.git
+```
+
+and you're done! 
