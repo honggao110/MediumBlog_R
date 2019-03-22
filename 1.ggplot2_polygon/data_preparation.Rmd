@@ -1,0 +1,68 @@
+---
+title: "Plot Polygon with ggplot2"
+author: "Hong Gao"
+output: html_document
+---
+
+This script contains all the code from my medium blog post. 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# © 2019 Hong Gao, All Rights Reserved
+# Install and library all the necessary packages
+if(!require("ggplot2")){
+  install.packages("ggplot2")
+  library("ggplot2")
+} else {
+  library("ggplot2")
+}
+if(!require("RColorBrewer")){
+  install.packages("RColorBrewer")
+  library("RColorBrewer")
+} else {
+  library("RColorBrewer")
+}
+if(!require("rgdal")){
+  install.packages("rgdal")
+  library("rgdal")
+} else {
+  library("rgdal")
+}
+```
+
+Read in and plot New York City Zip Code map. 
+
+```{r message=FALSE, warning=FALSE}
+# set directory to where the zip code shapefile is
+filepath = "~/Documents/HongGao/MediumBlog_R/1.ggplot2_polygon"
+setwd(filepath)
+# read in zip code shapefile
+zipcode <- readOGR(".", "ZIP_CODE_040114")
+# generate a unique ID for each polygon
+zipcode@data$seq_id <- seq(1:nrow(zipcode@data))
+# plot it
+plot(zipcode)
+```
+
+Generate random data to plot with. 
+
+```{r message=FALSE, warning=FALSE}
+# generate random numbers from a uniform distribution
+zipcode@data$continuous_var <- runif(nrow(zipcode@data))
+# create some NAs
+# values below 0.1 are changed to NA
+zipcode@data[zipcode@data$continuous_var < 0.1,]$continuous_var <- NA
+# generate categotical variable based on continuous var
+zipcode@data$categorical_var <- .bincode(zipcode@data$continuous_var, 
+                                         # calculate 33th and 66th percentile
+                                         breaks = quantile(zipcode@data$continuous_var, 
+                                                           seq(0,1,0.33), 
+                                                           # keep NA as NA
+                                                           na.rm = T), 
+                                         include.lowest = T)
+```
+
+Save the changed shapefile to current directory.  
+
+```{r message=FALSE, warning=FALSE}
+writeOGR(zipcode, "nyczipcode", "nyc_zipcode", driver = "ESRI Shapefile")
+```
