@@ -1,9 +1,7 @@
 ---
 title: "Plot Polygon with ggplot2"
 author: "Hong Gao"
-output:
-  pdf_document: default
-  html_document: default
+output: html_notebook
 ---
 
 This script contains all the code from my medium blog post. 
